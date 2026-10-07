@@ -2,16 +2,45 @@ import ProductCard from "./components/ProductCard.jsx";
 import "./App.css";
 import products from "./data";
 import { useState, useEffect } from "react";
+import { use } from "react";
 
 function App() {
   // ─── State ───
   const allBrands = ["All", ...new Set(products.map((e) => e.brand))];
-  const allCategories = [
-    "All",
-    ...new Set(products.map((e) => e.subCategory)),
-  ];
-  const [cartItems, setCartItems] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
+  const allCategories = ["All", ...new Set(products.map((e) => e.subCategory))];
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("sport-cart");
+    if (savedCart) {
+      try {
+        return JSON.parse(savedCart);
+      } catch (error) {
+        console.log("problem Occur", error);
+        return "Hey Something Went Wrong!!";
+      }
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("sport-cart", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  const [wishlist, setWishlist] = useState(() => {
+    const savedWish = localStorage.getItem("wished-item");
+    if (savedWish) {
+      try {
+        return JSON.parse(savedWish);
+      } catch (error) {
+        console.log("Hey Some Problem Occur!!", error);
+      }
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("wished-item", JSON.stringify(wishlist));
+  }, [wishlist]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("All");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -28,7 +57,7 @@ function App() {
         return prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
-            : item
+            : item,
         );
       }
       return [...prev, { ...product, quantity: 1 }];
@@ -42,9 +71,9 @@ function App() {
         .map((item) =>
           item.id === productId
             ? { ...item, quantity: item.quantity + delta }
-            : item
+            : item,
         )
-        .filter((item) => item.quantity > 0)
+        .filter((item) => item.quantity > 0),
     );
   }
 
@@ -52,13 +81,10 @@ function App() {
     setCartItems((prev) => prev.filter((item) => item.id !== productId));
   }
 
-  const cartCount = cartItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
   const cartTotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
-    0
+    0,
   );
 
   // ─── Wishlist Logic ───
@@ -66,7 +92,7 @@ function App() {
     setWishlist((prev) =>
       prev.includes(productId)
         ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
+        : [...prev, productId],
     );
   }
 
@@ -94,7 +120,7 @@ function App() {
     filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
   } else if (sortBy === "rating") {
     filteredProducts = [...filteredProducts].sort(
-      (a, b) => b.rating - a.rating
+      (a, b) => b.rating - a.rating,
     );
   }
 
@@ -272,14 +298,17 @@ function App() {
               aria-label="Cart"
             >
               🛒
-              {cartCount > 0 && (
-                <span className="badge">{cartCount}</span>
-              )}
+              {cartCount > 0 && <span className="badge">{cartCount}</span>}
             </button>
 
-            <button className="nav-btn primary" onClick={() => {
-              document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
-            }}>
+            <button
+              className="nav-btn primary"
+              onClick={() => {
+                document
+                  .getElementById("products")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               Shop Now
             </button>
           </div>
@@ -445,30 +474,54 @@ function App() {
           <div className="footer-col">
             <h4 className="footer-heading">Shop</h4>
             <ul className="footer-links">
-              <li><a href="#products">Cricket Bats</a></li>
-              <li><a href="#products">Balls</a></li>
-              <li><a href="#products">Shoes</a></li>
-              <li><a href="#products">Protective Gear</a></li>
+              <li>
+                <a href="#products">Cricket Bats</a>
+              </li>
+              <li>
+                <a href="#products">Balls</a>
+              </li>
+              <li>
+                <a href="#products">Shoes</a>
+              </li>
+              <li>
+                <a href="#products">Protective Gear</a>
+              </li>
             </ul>
           </div>
 
           <div className="footer-col">
             <h4 className="footer-heading">Company</h4>
             <ul className="footer-links">
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#">Contact</a></li>
-              <li><a href="#">Careers</a></li>
-              <li><a href="#">Blog</a></li>
+              <li>
+                <a href="#about">About Us</a>
+              </li>
+              <li>
+                <a href="#">Contact</a>
+              </li>
+              <li>
+                <a href="#">Careers</a>
+              </li>
+              <li>
+                <a href="#">Blog</a>
+              </li>
             </ul>
           </div>
 
           <div className="footer-col">
             <h4 className="footer-heading">Support</h4>
             <ul className="footer-links">
-              <li><a href="#">Help Center</a></li>
-              <li><a href="#">Returns</a></li>
-              <li><a href="#">Shipping</a></li>
-              <li><a href="#">Privacy Policy</a></li>
+              <li>
+                <a href="#">Help Center</a>
+              </li>
+              <li>
+                <a href="#">Returns</a>
+              </li>
+              <li>
+                <a href="#">Shipping</a>
+              </li>
+              <li>
+                <a href="#">Privacy Policy</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -476,10 +529,18 @@ function App() {
         <div className="footer-bottom">
           <p>&copy; 2026 Bharath Sports. All rights reserved.</p>
           <div className="footer-social">
-            <a href="#" className="social-link" aria-label="Instagram">📷</a>
-            <a href="#" className="social-link" aria-label="Twitter">🐦</a>
-            <a href="#" className="social-link" aria-label="Facebook">📘</a>
-            <a href="#" className="social-link" aria-label="YouTube">▶️</a>
+            <a href="#" className="social-link" aria-label="Instagram">
+              📷
+            </a>
+            <a href="#" className="social-link" aria-label="Twitter">
+              🐦
+            </a>
+            <a href="#" className="social-link" aria-label="Facebook">
+              📘
+            </a>
+            <a href="#" className="social-link" aria-label="YouTube">
+              ▶️
+            </a>
           </div>
         </div>
       </footer>

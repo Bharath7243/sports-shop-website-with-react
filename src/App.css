@@ -49,7 +49,11 @@
 
 /* ========== BASE STYLES ========== */
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
@@ -88,9 +92,10 @@ body {
   font-size: 0.9rem;
   font-weight: 500;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-  animation: toastIn 0.4s ease forwards, toastOut 0.4s ease 2s forwards;
+  animation:
+    toastIn 0.4s ease forwards,
+    toastOut 0.4s ease 2s forwards;
 }
-
 .toast-icon {
   background: var(--success);
   color: white;
@@ -597,9 +602,11 @@ body {
   transform: translateX(-50%);
   width: 150%;
   height: 100%;
-  background: radial-gradient(ellipse at 50% 0%,
-      rgba(0, 113, 227, 0.15) 0%,
-      transparent 60%);
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(0, 113, 227, 0.15) 0%,
+    transparent 60%
+  );
   pointer-events: none;
   animation: heroGlow 8s ease-in-out infinite alternate;
 }
@@ -654,7 +661,6 @@ body {
 }
 
 @keyframes gradientShift {
-
   0%,
   100% {
     background-position: 0% 50%;
@@ -717,10 +723,12 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -793,7 +801,7 @@ body {
   background: var(--bg-secondary);
 }
 
-.products-section>* {
+.products-section > * {
   max-width: var(--max-width);
   margin-left: auto;
   margin-right: auto;
